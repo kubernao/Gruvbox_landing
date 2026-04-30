@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Gruvbox Studio — Where writers steer, AI assists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Zed+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+  <style>
+    /* -------------------------------------------------------------------------
+     * Palette & semantic tokens (from root.css)
+     * ---------------------------------------------------------------------- */
+    :root {
+      --bg_h: #1d2021;
+      --bg: #1d2021;
+      --bg1: #282828;
+      --bg2: #32302f;
+      --bg3: #3c3836;
+      --bg4: #504945;
+
+      --fg:  #ebdbb2;
+      --fg1: #ebdbb2;
+      --fg2: #d5c4a1;
+      --fg3: #bdae93;
+      --fg4: #a89984;
+
+      --red:        #fb4934;
+      --red-dim:    #cc241d;
+      --green:      #b8bb26;
+      --green-dim:  #98971a;
+      --yellow:     #fabd2f;
+      --yellow-dim: #d79921;
+      --blue:       #83a598;
+      --blue-dim:   #458588;
+      --purple:     #d3869b;
+      --purple-dim: #b16286;
+      --aqua:       #8ec07c;
+      --aqua-dim:   #689d6a;
+      --orange:     #fe8019;
+      --orange-dim: #d65d0e;
+      --gray:       #928374;
+
+      --bg-primary:   var(--bg_h);
+      --text-primary: var(--fg);
+      --text-secondary: var(--fg2);
+      --text-muted:   var(--fg3);
+      --accent-primary: var(--purple);
+      --accent-secondary: var(--orange);
+      --accent-highlight: var(--yellow);
+      --accent-info: var(--blue);
+      --border-subtle: var(--bg3);
+      --border-default: var(--bg3);
+
+      --font-display: Georgia, "Times New Roman", serif;
+      --font-ui:      "Zed Mono", "Cutive Mono", "Courier New", Courier, monospace;
+      --font-body:    "Zed Mono", "Cutive Mono", "Courier New", Courier, monospace;
+      --font-heading: "Libre Baskerville", Baskerville, Georgia, serif;
+      --font-mono:    "Cutive Mono", "Courier New", Courier, monospace;
+
+      /* Horizontal breathing room from the viewport edge (nav, sections, full-bleed grids) */
+      --page-gutter: clamp(28px, 5vw, 56px);
+      /* Notch / home-indicator safe area (used with viewport-fit=cover) */
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* -------------------------------------------------------------------------
+     * Reset & base
+     * ---------------------------------------------------------------------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--blue-dim); text-decoration: underline; }
+
+    /* -------------------------------------------------------------------------
+     * Layout helpers
+     * ---------------------------------------------------------------------- */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+    }
+
+    /* Hero controls its own padding; omit global section gutters so height math is purely #hero rules */
+    section:not(#hero) {
+      padding: 96px 0;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Nav
+     * ---------------------------------------------------------------------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(29, 32, 33, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 56px;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 8px calc(var(--page-gutter) + var(--safe-right)) 8px calc(var(--page-gutter) + var(--safe-left));
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      max-width: 100%;
+    }
+    .nav-logo:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav-ascii {
+      font-family: var(--font-mono);
+      font-size: 3.2px;
+      line-height: 1.18;
+      white-space: pre;
+      background: linear-gradient(
+        to bottom,
+        var(--fg1) 0%,
+        var(--purple) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      user-select: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--fg3);
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--fg); text-decoration: none; }
+
+    .nav-cta {
+      font-family: var(--font-ui);
+      font-size: 15px;
+      padding: 7px 18px;
+      border-radius: 4px;
+      border: 1px solid var(--accent-primary);
+      color: var(--accent-primary);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      text-decoration: none;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Hero
+     * ---------------------------------------------------------------------- */
+    #hero {
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    /* Headline block only — exactly one viewport; screenshot sits below */
+    .hero-copy {
+      box-sizing: border-box;
+      position: relative;
+      isolation: isolate;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      padding-block: clamp(88px, 14vh, 132px);
+    }
+
+    /* Inverted vignette: darker at center behind copy, easing toward edges */
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(
+        ellipse min(96vw, 820px) min(92vh, 780px) at 50% 46%,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.08) 42%,
+        rgba(0, 0, 0, 0) 62%,
+        transparent 78%
+      );
+    }
+
+    #hero .hero-copy .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 6vw, 58px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--fg1);
+      margin-bottom: 24px;
+    }
+
+    /* Hero headline: roomy lines + clear rhythm between rows */
+    #hero .hero-copy > .container > h1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(14px, 2.2vw, 22px);
+      line-height: 1.3;
+      max-width: 22em;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 28px;
+    }
+
+    #hero .hero-copy > .container > h1 .hero-headline-line {
+      display: block;
+    }
+
+    h1 .accent-yellow { color: var(--yellow); }
+    h1 .accent-purple { color: var(--purple); }
+
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: clamp(19px, 2.5vw, 23px);
+      color: var(--text-secondary);
+      max-width: 38rem;
+      margin: 0 auto 44px;
+      line-height: 1.2;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 4px;
+      border: none;
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-primary:hover {
+      background: #e0a3b5;
+      transform: translateY(-1px);
+      text-decoration: none;
+      color: var(--bg-primary);
+    }
+
+    .btn-ghost {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      padding: 12px 28px;
+      border-radius: 4px;
+      border: 1px solid var(--bg4);
+      background: transparent;
+      color: var(--fg2);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--fg3);
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    #hero .btn-primary,
+    #hero .btn-ghost {
+      font-size: 20px;
+      padding: 10px 20px;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Hero screenshot
+     * ---------------------------------------------------------------------- */
+    /* Same width + centering as the product image so copy lines up with the picture’s left edge */
+    .hero-product-rail {
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(
+        1400px,
+        calc(100vw - 2 * var(--page-gutter) - var(--safe-left) - var(--safe-right))
+      );
+      box-sizing: border-box;
+    }
+
+    .hero-shot-title {
+      font-family: var(--font-heading);
+      font-size: 2.3em;
+      font-weight: 700;
+      color: var(--fg1);
+      text-align: left;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 2em;
+    }
+
+    .hero-editor-shot {
+      position: relative;
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 0;
+    }
+
+    .hero-editor-shot::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 42%;
+      min-height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--bg-primary));
+      pointer-events: none;
+    }
+
+    .hero-editor-shot img {
+      display: block;
+      width: 100%;
+      max-width: min(
+        1400px,
+        calc(100vw - 2 * var(--page-gutter) - var(--safe-left) - var(--safe-right))
+      );
+      height: auto;
+      vertical-align: bottom;
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+
+    /* Bottom fade shell: gradient matches parent section (--fade-bg).
+       Height is % of image so portrait and landscape behave. */
+    .img-fade-shell {
+      position: relative;
+      line-height: 0;
+    }
+
+    .img-fade-shell::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 42%;
+      min-height: 72px;
+      background: linear-gradient(to bottom, transparent, var(--fade-bg, var(--bg_h)));
+      pointer-events: none;
+    }
+
+    .img-fade-shell img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section typography (features, safety, CTA)
+     * ---------------------------------------------------------------------- */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-secondary);
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 700;
+      color: var(--fg1);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 56px;
+      line-height: 1.7;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section: Wrong tools (generic prompt vs legacy word processor)
+     * ---------------------------------------------------------------------- */
+    #wrong-tools {
+      background: var(--bg_h);
+      width: 100%;
+      box-sizing: border-box;
+      /* One height for both mock windows (prompt + word processor) */
+      --wrong-tools-mock-height: clamp(380px, 44vw, 520px);
+      /* Shared depth for mock frames + inner document page */
+      --mock-frame-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.4),
+        0 24px 64px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Edge-to-edge content; only horizontal gutters (matches features-grid-bleed) */
+    .wrong-tools-bleed,
+    .writer-happiness-bleed,
+    .assistant-bleed {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+      box-sizing: border-box;
+    }
+
+    .wrong-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 72px);
+      align-items: start;
+    }
+
+    .wrong-tools-block {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .wrong-tools-headline {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 3.2vw, 30px);
+      font-weight: 700;
+      color: var(--fg1);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin: 0;
+      max-width: 22em;
+    }
+
+    .wrong-tools-sub {
+      font-size: 1.3em;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin: 0;
+      max-width: 36rem;
+    }
+
+    /* Shared mock frame: “window” on dark canvas — same pixel height for both columns */
+    .mock-ui {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--mock-frame-shadow);
+      font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: left;
+      height: var(--wrong-tools-mock-height, clamp(380px, 44vw, 520px));
+      min-height: var(--wrong-tools-mock-height, clamp(380px, 44vw, 520px));
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* —— Generic prompt / chat UI (modern dark “assistant” shell) —— */
+    .mock-prompt-ui {
+      background: linear-gradient(165deg, #1a1b1f 0%, #121316 45%, #0e0f12 100%);
+      color: #e4e4e7;
+    }
+
+    .mock-prompt-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 14px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+
+    .mock-prompt-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: #fafafa;
+    }
+
+    .mock-prompt-brand::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #c084fc 0%, #38bdf8 100%);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12), 0 0 16px rgba(192, 132, 252, 0.35);
+    }
+
+    .mock-prompt-model {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #a1a1aa;
+      padding: 7px 14px 7px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .mock-prompt-thread {
+      flex: 1;
+      min-height: 0;
+      padding: 20px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: hidden;
+      justify-content: flex-end;
+      background:
+        radial-gradient(ellipse 90% 60% at 50% 0%, rgba(99, 102, 241, 0.12), transparent 55%),
+        radial-gradient(ellipse 70% 40% at 100% 80%, rgba(56, 189, 248, 0.06), transparent 50%);
+    }
+
+    .mock-prompt-msg {
+      max-width: 94%;
+      padding: 13px 17px;
+      font-size: 13px;
+      line-height: 1.5;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .mock-prompt-msg--user {
+      align-self: flex-end;
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.35) 0%, rgba(79, 70, 229, 0.28) 100%);
+      border: 1px solid rgba(165, 180, 252, 0.35);
+      color: #f4f4f5;
+      border-radius: 20px 20px 6px 20px;
+    }
+
+    .mock-prompt-msg--bot {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d4d4d8;
+      border-radius: 20px 20px 20px 6px;
+    }
+
+    .mock-prompt-inputbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 14px 16px;
+      background: rgba(0, 0, 0, 0.35);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      flex-shrink: 0;
+    }
+
+    .mock-prompt-fake-input {
+      flex: 1;
+      padding: 13px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: #71717a;
+      font-size: 13px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+
+    .mock-prompt-send {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #818cf8 0%, #6366f1 45%, #4f46e5 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      font-weight: 600;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
+    }
+
+    /* —— Legacy word-processor mock (oppressive Office-like) —— */
+    .mock-word-ui {
+      background: #e8e8e8;
+      color: #222;
+    }
+
+    .mock-word-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #2c5aa0 0%, #1e4a7a 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .mock-word-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .mock-word-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .mock-word-title {
+      flex: 1;
+      text-align: center;
+      padding-right: 48px;
+      opacity: 0.95;
+    }
+
+    .mock-word-ribbon {
+      background: #f3f3f3;
+      border-bottom: 1px solid #c6c6c6;
+      flex-shrink: 0;
+    }
+
+    .mock-word-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 8px;
+      font-size: 11px;
+      border-bottom: 1px solid #c6c6c6;
+    }
+
+    .mock-word-tabs span {
+      padding: 6px 12px;
+      color: #444;
+    }
+
+    .mock-word-tabs span.mock-word-tab-active {
+      background: #f3f3f3;
+      border: 1px solid #c6c6c6;
+      border-bottom-color: #f3f3f3;
+      margin-bottom: -1px;
+      font-weight: 600;
+    }
+
+    .mock-word-ribbon-tools {
+      padding: 8px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 10px;
+      color: #555;
+      flex-wrap: wrap;
+    }
+
+    .mock-word-ribbon-tools .sep {
+      width: 1px;
+      height: 18px;
+      background: #d0d0d0;
+    }
+
+    .mock-word-page-wrap {
+      flex: 1;
+      min-height: 0;
+      padding: 16px 14px 18px;
+      background: #c0c0c0;
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
+      align-items: stretch;
+    }
+
+    .mock-word-page {
+      flex: 1;
+      width: 100%;
+      max-width: 100%;
+      min-height: 0;
+      background: #fff;
+      box-shadow: var(--mock-frame-shadow);
+      padding: 20px 24px;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 11px;
+      line-height: 1.55;
+      color: #222;
+    }
+
+    .mock-word-page h4 {
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      text-align: center;
+      text-decoration: underline;
+    }
+
+    .mock-word-page p {
+      margin: 0 0 8px;
+      text-align: justify;
+    }
+
+    .mock-word-squiggle {
+      text-decoration: underline wavy #c62828;
+      text-underline-offset: 2px;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section: Features
+     * ---------------------------------------------------------------------- */
+    #features { background: var(--bg_h); }
+
+    .features-grid-bleed {
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: calc(var(--page-gutter) + var(--safe-left));
+      padding-right: calc(var(--page-gutter) + var(--safe-right));
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: none;
+    }
+
+    .feature-card {
+      background: transparent;
+      border: 1px solid var(--bg3);
+      border-radius: 6px;
+      padding: 28px 28px;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover { border-color: var(--bg4); }
+
+    .feature-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 3px;
+      margin-bottom: 14px;
+    }
+
+    .tag-ai      { background: rgba(211,134,155,0.15); color: var(--purple); }
+    .tag-editor  { background: rgba(131,165,152,0.15); color: var(--blue); }
+    .tag-history { background: rgba(250,189,47,0.15);  color: var(--yellow); }
+    .tag-format  { background: rgba(142,192,124,0.15); color: var(--aqua); }
+
+    .feature-card h3 {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--fg1);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 1.2em;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .feature-screenshot {
+      margin-top: 56px;
+      text-align: center;
+    }
+
+    .feature-screenshot .img-fade-shell {
+      width: fit-content;
+      max-width: min(520px, 100%);
+      margin-inline: auto;
+      --fade-bg: var(--bg_h);
+    }
+
+    .feature-screenshot figcaption {
+      margin-top: 14px;
+      font-size: 14px;
+      color: var(--fg4);
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section: Assistant (same layout pattern as writer happiness)
+     * ---------------------------------------------------------------------- */
+    #assistant {
+      background: var(--bg_h);
+      width: 100%;
+      box-sizing: border-box;
+      border-top: 1px solid var(--bg3);
+    }
+
+    #assistant .assistant-header {
+      text-align: center;
+    }
+
+    #assistant .assistant-header .section-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #assistant .safety-split {
+      margin-top: 48px;
+    }
+
+    #assistant .safety-visual .img-fade-shell {
+      max-width: min(400px, 100%);
+      margin-inline: auto;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section: Writer happiness (UI + revision history)
+     * ---------------------------------------------------------------------- */
+    #writer-happiness {
+      background: var(--bg_h);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #writer-happiness .writer-happiness-header {
+      text-align: center;
+    }
+
+    #writer-happiness .writer-happiness-header .section-sub {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #writer-happiness .safety-split {
+      margin-top: 48px;
+    }
+
+    #writer-happiness .safety-copy h3 {
+      font-family: var(--font-heading);
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 700;
+      color: var(--fg1);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+
+    #writer-happiness .safety-visual .img-fade-shell {
+      max-width: min(400px, 100%);
+      margin-inline: auto;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section: History / Safety callout
+     * ---------------------------------------------------------------------- */
+    #safety {
+      background: var(--bg_h);
+    }
+
+    .safety-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .safety-copy h2 { margin-bottom: 16px; }
+
+    .safety-copy p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .safety-copy p:last-child { margin-bottom: 0; }
+
+    .safety-copy .safety-kicker {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--fg4);
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+
+    .safety-visual {
+      position: relative;
+    }
+
+    .safety-visual .img-fade-shell {
+      width: 100%;
+      height: fit-content;
+      --fade-bg: var(--bg_h);
+    }
+
+    /* -------------------------------------------------------------------------
+     * Section: CTA
+     * ---------------------------------------------------------------------- */
+    #cta {
+      background: var(--bg_h);
+      text-align: center;
+    }
+
+    #cta h2 { margin-bottom: 16px; }
+
+    #cta .section-sub {
+      margin: 0 auto 40px;
+    }
+
+    /* -------------------------------------------------------------------------
+     * Footer
+     * ---------------------------------------------------------------------- */
+    footer {
+      background: var(--bg_h);
+      border-top: 1px solid var(--bg3);
+      padding: 36px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 calc(var(--page-gutter) + var(--safe-right)) calc(var(--safe-bottom))
+        calc(var(--page-gutter) + var(--safe-left));
+    }
+
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      color: var(--fg3);
+    }
+
+    .footer-logo span { color: var(--accent-primary); }
+
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--fg4);
+    }
+
+    /* -------------------------------------------------------------------------
+     * Responsive — width breakpoints + mobile / portrait aspect ratios
+     * ---------------------------------------------------------------------- */
+    @media (max-width: 1024px) {
+      .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .wrong-tools-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --page-gutter: clamp(16px, 4.5vw, 40px);
+      }
+      body { font-size: 16px; }
+      section:not(#hero) {
+        padding: clamp(56px, 12vw, 80px) 0;
+      }
+      .features-grid { grid-template-columns: 1fr; }
+      .safety-split { grid-template-columns: 1fr; gap: 40px; }
+      .wrong-tools-grid { grid-template-columns: 1fr; gap: 40px; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-inner {
+        justify-content: center;
+      }
+      .nav-logo {
+        justify-content: center;
+        margin: 0 auto;
+      }
+      .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+      .hero-shot-title {
+        font-size: clamp(1.15rem, 5vw, 1.75rem);
+        text-align: center;
+        margin-bottom: 1.25em;
+      }
+      #wrong-tools {
+        --wrong-tools-mock-height: clamp(280px, 48svh, 440px);
+      }
+      .wrong-tools-sub { font-size: 1.1em; }
+      .section-sub { font-size: 17px; margin-bottom: 40px; }
+      .feature-card { padding: 22px 20px; }
+      .feature-card p { font-size: 1.05em; }
+    }
+
+    /* Narrow portrait phones (~9:16 and taller): comfortable vertical rhythm */
+    @media (max-width: 480px) and (max-aspect-ratio: 3/4) {
+      :root {
+        --page-gutter: clamp(14px, 4vw, 24px);
+      }
+      .nav-ascii {
+        font-size: 2.6px;
+        line-height: 1.15;
+      }
+      h1 {
+        font-size: clamp(28px, 9vw, 42px);
+      }
+      .hero-sub {
+        font-size: clamp(16px, 4.2vw, 19px);
+        margin-bottom: 32px;
+      }
+      .hero-copy {
+        padding-block: clamp(72px, 18vw, 100px);
+      }
+      #hero .btn-primary,
+      #hero .btn-ghost {
+        font-size: 17px;
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Short landscape (mobile keyboard, landscape video): avoid oversized hero + mocks */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .hero-copy {
+        min-height: auto;
+        padding-block: 72px 48px;
+      }
+      #wrong-tools {
+        --wrong-tools-mock-height: clamp(200px, 38svh, 320px);
+      }
+    }
+
+    /* Very wide but short viewports */
+    @media (min-aspect-ratio: 2/1) and (max-height: 560px) {
+      .hero-copy {
+        min-height: auto;
+        padding-block: 64px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- -----------------------------------------------------------------------
+   * Nav
+   * -------------------------------------------------------------------- -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <pre class="nav-ascii">   ▄██████▄     ▄████████ ███    █▄   ▄█    █▄  ▀█████████▄   ▄██████▄  ▀████    ▐████▀         ▄████████     ███     ███    █▄  ████████▄   ▄█   ▄██████▄
+  ███    ███   ███    ███ ███    ███ ███    ███   ███    ███ ███    ███   ███▌   ████▀         ███    ███ ▀█████████▄ ███    ███ ███   ▀███ ███  ███    ███
+  ███    █▀    ███    ███ ███    ███ ███    ███   ███    ███ ███    ███    ███  ▐███           ███    █▀     ▀███▀▀██ ███    ███ ███    ███ ███▌ ███    ███
+ ▄███         ▄███▄▄▄▄██▀ ███    ███ ███    ███  ▄███▄▄▄██▀  ███    ███    ▀███▄███▀           ███            ███   ▀ ███    ███ ███    ███ ███▌ ███    ███
+▀▀███ ████▄  ▀▀███▀▀▀▀▀   ███    ███ ███    ███ ▀▀███▀▀▀██▄  ███    ███    ████▀██▄          ▀███████████     ███     ███    ███ ███    ███ ███▌ ███    ███
+  ███    ███ ▀███████████ ███    ███ ███    ███   ███    ██▄ ███    ███   ▐███  ▀███                  ███     ███     ███    ███ ███    ███ ███  ███    ███
+  ███    ███   ███    ███ ███    ███ ███    ███   ███    ███ ███    ███  ▄███     ███▄          ▄█    ███     ███     ███    ███ ███   ▄███ ███  ███    ███
+  ████████▀    ███    ███ ████████▀   ▀██████▀  ▄█████████▀   ▀██████▀  ████       ███▄       ▄████████▀     ▄████▀   ████████▀  ████████▀  █▀    ▀██████▀
+               ███    ███                                                                                                                                   </pre>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#safety">Stay in charge</a></li>
+      </ul>
+      <a href="#cta" class="nav-cta">Early Access</a>
+    </div>
+  </nav>
+
+  <!-- -----------------------------------------------------------------------
+   * Hero
+   * -------------------------------------------------------------------- -->
+  <section id="hero">
+    <div class="hero-copy">
+      <div class="container">
+        <h1>
+          <span class="hero-headline-line">AI shouldn&apos;t replace you.</span>
+          <span class="hero-headline-line">
+            It should help you <span class="accent-yellow">make better things, faster.</span>
+          </span>
+        </h1>
+        <p class="hero-sub">
+          Our philosphy: People are capable of using AI responsibly- they just havent been given the right tools.
+        </p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">Request early access</a>
+          <a href="#features" class="btn-ghost">See what we&apos;re building</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- -----------------------------------------------------------------------
+   * Wrong tools: generic prompt vs legacy word processor
+   * -------------------------------------------------------------------- -->
+  <section id="wrong-tools" aria-label="Two familiar tools that are not enough for serious writing">
+    <div class="wrong-tools-bleed">
+      <div class="wrong-tools-grid">
+        <article class="wrong-tools-block">
+          <div class="mock-ui mock-prompt-ui" aria-hidden="true">
+            <div class="mock-prompt-topbar">
+              <span class="mock-prompt-brand">Assistant</span>
+              <span class="mock-prompt-model">Model ▾</span>
+            </div>
+            <div class="mock-prompt-thread">
+              <div class="mock-prompt-msg mock-prompt-msg--user">Write my entire article for me. Make it sound smart.</div>
+              <div class="mock-prompt-msg mock-prompt-msg--bot">Here is a long draft. I have structured it into sections and&hellip;</div>
+            </div>
+            <div class="mock-prompt-inputbar">
+              <div class="mock-prompt-fake-input">Send a message&hellip;</div>
+              <div class="mock-prompt-send" aria-hidden="true">↑</div>
+            </div>
+          </div>
+          <h2 class="wrong-tools-headline">This isn&apos;t writing.</h2>
+          <p class="wrong-tools-sub">
+            You don&apos;t control the text — it&apos;s awkward to spell out your style,
+            your rules, and how you want each piece to read. The model fills the gaps blind, and what comes back is often
+            slop. You are unable to truly express yourself.
+          </p>
+        </article>
+        <article class="wrong-tools-block">
+          <div class="mock-ui mock-word-ui" aria-hidden="true">
+            <div class="mock-word-titlebar">
+              <div class="mock-word-dots"><span class="mock-word-dot"></span><span class="mock-word-dot"></span><span class="mock-word-dot"></span></div>
+              <span class="mock-word-title">Staff_Memo.docx — older format, still open</span>
+            </div>
+            <div class="mock-word-ribbon">
+              <div class="mock-word-tabs">
+                <span>File</span>
+                <span class="mock-word-tab-active">Home</span>
+                <span>Insert</span>
+                <span>Layout</span>
+                <span>Review</span>
+              </div>
+              <div class="mock-word-ribbon-tools">
+                <span>Paste</span><span class="sep"></span>
+                <strong>B</strong> <em>I</em> <span>U</span><span class="sep"></span>
+                <span>Styles</span><span class="sep"></span>
+                <span>Find</span>
+              </div>
+            </div>
+            <div class="mock-word-page-wrap">
+              <div class="mock-word-page">
+                <h4>The same memo layout, year after year</h4>
+                <p>
+                  This screen made sense when work lived on paper and you &quot;saved&quot; to a floppy disk. It still
+                  runs — but it was never rebuilt for fast drafts, links, or writing with help from a model. It is an
+                  old tool that many teams keep open out of habit, not because it still fits the job.
+                </p>
+                <p>
+                  Newer ways to write are here. This one is familiar, slow to change, and quietly
+                  <span class="mock-word-squiggle">on the way out</span>.
+                </p>
+              </div>
+            </div>
+          </div>
+          <h2 class="wrong-tools-headline">This doesn&apos;t make writers happy.</h2>
+          <p class="wrong-tools-sub">
+            The old word processor: familiar, heavy, and still shaped for print-era
+            memos. It wasn&apos;t built for how drafts move today, and nobody feels happy working in it.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- -----------------------------------------------------------------------
+   * Solution screenshot (full-width rail, continuous with hero palette)
+   * -------------------------------------------------------------------- -->
+  <div id="solution">
+    <div class="hero-product-rail">
+      <h2 class="hero-shot-title">Here's what our solution looks like:</h2>
+    </div>
+    <figure class="hero-product-rail hero-editor-shot">
+      <img
+        src="assets/Main-application.png"
+        width="1917"
+        height="1006"
+        alt="Gruvbox Studio main application: editor with Markdown document and side panels"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </figure>
+  </div>
+
+  <!-- -----------------------------------------------------------------------
+   * Writer happiness: meticulous UI + revision history
+   * -------------------------------------------------------------------- -->
+  <section id="writer-happiness" aria-labelledby="writer-happiness-heading">
+    <div class="writer-happiness-bleed">
+      <div class="writer-happiness-header">
+        <div class="section-label">Design goals</div>
+        <h2 id="writer-happiness-heading">Optimized for writer happiness</h2>
+        <p class="section-sub">
+          We fuss over layout, type, and pacing so the screen stays gentle on the eyes — and we treat older drafts as
+          something you can always find again, not something you cross your fingers and hope is still there.
+        </p>
+      </div>
+      <div class="safety-split">
+        <div class="safety-copy">
+          <div class="section-label">Version history</div>
+          <h2>Every version leaves a footprint — so you can move fast without betting the file.</h2>
+          <p>
+            You know this: a sentence felt perfect at lunch and wrong by dinner. The assistant might hand you something
+            lovely and something shaky in the same breath. Most tools leave you with one fragile draft or a pile of
+            duplicate files. Here your work stays in order — what you wrote, the moments you saved when the words were
+            flowing, and separate tries when you or the assistant want to experiment without throwing away what already
+            worked.
+          </p>
+          <p>
+            You can look back, set two moments side by side, and change your mind more than once. Nothing you cared
+            about quietly disappears. The picture here is that trail: a plain record of how the piece grew.
+          </p>
+          <p>
+            You can move quickly and still stay in charge: nothing the assistant suggests becomes part of the draft
+            until you say so — all of it, none of it, or just a single line. Speed doesn&apos;t get to rewrite the page
+            behind your back.
+          </p>
+          <p class="safety-kicker">Below · your versions, shown together in the editor</p>
+        </div>
+        <div class="safety-visual">
+          <div class="img-fade-shell">
+            <img
+              src="assets/history_graph.png"
+              width="478"
+              height="877"
+              alt="Gruvbox Studio: revision history view showing versions of your document over time"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- -----------------------------------------------------------------------
+   * Features
+   * -------------------------------------------------------------------- -->
+  <section id="features">
+    <div class="container">
+      <div class="section-label">Proof in the craft</div>
+      <h2>Powerful tools for serious writing.</h2>
+      <p class="section-sub">
+        Underneath that philosophy sits a pragmatic editor — pick your partner model, see every change, rescue any moment from history.
+      </p>
+    </div>
+
+    <div class="features-grid-bleed">
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-tag tag-ai">AI</span>
+          <h3>Pick your model</h3>
+          <p>
+            Drop in any AI model via a pre-configured connection — no API keys
+            to wrangle, no technical setup required.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-tag tag-history">History</span>
+          <h3>Full edit history</h3>
+          <p>
+            Every keystroke is tracked. Step back to any previous version of
+            your document at any point — yours and the AI's changes included.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-tag tag-editor">Editor</span>
+          <h3>Decoration-first Markdown</h3>
+          <p>
+            Rich text renders as structured decorations while you stay in plaintext mode — so models see
+            the same intents you see. Markdown on a rigid grid keeps the caret honest and your layout stable.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-tag tag-ai">AI</span>
+          <h3>Cherry-pick AI changes</h3>
+          <p>
+            The AI suggests, you choose. Accept all, reject all, or pick
+            individual changes from a side-by-side diff view.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-tag tag-format">Format</span>
+          <h3>Mermaid &amp; LaTeX — first-class ideas</h3>
+          <p>
+            Diagrams and math aren&apos;t afterthought screenshots — they plug into an AI‑friendly substrate
+            that keeps extending without orphaned legacy documents.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-tag tag-editor">Editor</span>
+          <h3>Gruvbox warmth, on purpose</h3>
+          <p>
+            A low-contrast palette tuned for marathon sessions — the same intentionality runs through
+            layout, pacing, and how often we interrupt flow.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- -----------------------------------------------------------------------
+   * Assistant: same bleed + header + safety-split pattern as writer happiness
+   * -------------------------------------------------------------------- -->
+  <section id="assistant" aria-labelledby="assistant-heading">
+    <div class="assistant-bleed">
+      <div class="assistant-header">
+        <div class="section-label">Assistant</div>
+        <h2 id="assistant-heading">You steer what the model sees, says, and changes.</h2>
+        <p class="section-sub">
+          The assistant isn&apos;t a black box that forgets your world every session. You set the guardrails once — style
+          guides, house rules, who your characters are — and the model works inside them. You decide what it reads, what
+          it writes, and which edits actually touch your draft.
+        </p>
+      </div>
+      <div class="safety-split">
+        <div class="safety-visual">
+          <div class="img-fade-shell">
+            <img
+              src="assets/AI_chat.png"
+              width="493"
+              height="699"
+              alt="Gruvbox Studio: AI assistant with document context, rules, and tracked edits"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+        <div class="safety-copy">
+          <div class="section-label">Rules, memory, and your file</div>
+          <h2>Control the input, the output, and what lands on the page</h2>
+          <p>
+            Stop retyping the same brief in every prompt. Attach style documents, explicit rules (show don&apos;t tell,
+            POV, tone), and character sheets — the assistant treats them as ground truth, not something you have to
+            re-explain each time. That shapes both what you ask for and what you get back: output that stays inside the
+            lines you drew.
+          </p>
+          <p>
+            Memory persists across the work: the assistant remembers your project context instead of starting cold.
+            Use commands to drive it, and let it explore the files you allow — so answers and edits are grounded in your
+            tree, not a pasted snippet from last week.
+          </p>
+          <p>
+            When the model edits the document you&apos;re looking at, every change is highlighted. Accept a line, reject
+            another, or revert the batch altogether — you choose what becomes real text, with no silent rewrites behind
+            the scenes.
+          </p>
+          <p class="safety-kicker">Below · assistant with rules and memory — you approve every change to the draft</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- -----------------------------------------------------------------------
+   * Safety / History deep-dive
+   * -------------------------------------------------------------------- -->
+
+  <!-- -----------------------------------------------------------------------
+   * CTA
+   * -------------------------------------------------------------------- -->
+  <section id="cta">
+    <div class="container">
+      <div class="section-label">Join the builders</div>
+      <h2>We&apos;re building this in public — with people who still believe the author matters.</h2>
+      <p class="section-sub">
+        Gruvbox Studio is young: rough edges, strong opinions, and a bet that the best writing won&apos;t come from
+        handing the keys to a black box. If that story sounds like yours — if you want tools that remember your intent,
+        show their work, and let you steer — ask for early access. You&apos;ll get previews, plain-spoken release notes,
+        and a seat at the table where we decide what ships next. Skepticism welcome; it keeps us honest.
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Early Access" class="btn-primary">Request access</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- -----------------------------------------------------------------------
+   * Footer
+   * -------------------------------------------------------------------- -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">Gruvbox<span>Studio</span></span>
+      <span class="footer-note">Early preview — not yet released</span>
+    </div>
+  </footer>
+
+</body>
+</html>
