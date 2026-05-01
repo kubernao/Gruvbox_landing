@@ -6,7 +6,7 @@
   <title>Gruvbox Studio — Where writers steer, AI assists</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Zed+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Zed+Mono:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
   <style>
     /* -------------------------------------------------------------------------
      * Palette & semantic tokens (from root.css)
@@ -52,14 +52,20 @@
       --border-subtle: var(--bg3);
       --border-default: var(--bg3);
 
+      --surface-1:    rgba(40, 40, 40, 0.55);
+      --surface-border: rgba(80, 73, 69, 0.45);
+      --shadow-soft:  0 18px 48px rgba(0, 0, 0, 0.35);
+      --shadow-nav:   0 1px 0 rgba(255, 255, 255, 0.04);
+
       --font-display: Georgia, "Times New Roman", serif;
-      --font-ui:      "Zed Mono", "Cutive Mono", "Courier New", Courier, monospace;
-      --font-body:    "Zed Mono", "Cutive Mono", "Courier New", Courier, monospace;
+      --font-ui:      "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-body:    "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-heading: "Libre Baskerville", Baskerville, Georgia, serif;
-      --font-mono:    "Cutive Mono", "Courier New", Courier, monospace;
+      --font-mono:    "Cutive Mono", "Zed Mono", "Courier New", Courier, monospace;
 
       /* Horizontal breathing room from the viewport edge (nav, sections, full-bleed grids) */
-      --page-gutter: clamp(28px, 5vw, 56px);
+      --page-gutter: clamp(24px, 4.5vw, 64px);
+      --content-max: 1100px;
       /* Notch / home-indicator safe area (used with viewport-fit=cover) */
       --safe-left: env(safe-area-inset-left, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
@@ -71,32 +77,64 @@
      * ---------------------------------------------------------------------- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
 
     body {
       background: var(--bg-primary);
       color: var(--text-primary);
-      font-family: var(--font-ui);
+      font-family: var(--font-body);
       font-size: 17px;
-      line-height: 1.65;
+      font-optical-sizing: auto;
+      line-height: 1.62;
+      letter-spacing: 0.01em;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    a { color: var(--blue); text-decoration: none; }
-    a:hover { color: var(--blue-dim); text-decoration: underline; }
+    a { color: var(--blue); text-decoration: none; transition: color 0.15s ease; }
+    a:hover { color: var(--aqua); text-decoration: underline; text-underline-offset: 3px; }
+    a:focus-visible,
+    button:focus-visible,
+    [role="button"]:focus-visible {
+      outline: 2px solid var(--accent-highlight);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
 
     /* -------------------------------------------------------------------------
      * Layout helpers
      * ---------------------------------------------------------------------- */
     .container {
-      max-width: 960px;
+      max-width: var(--content-max);
       margin: 0 auto;
       padding: 0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
     }
 
+    .skip-link {
+      position: absolute;
+      left: 12px;
+      top: -48px;
+      z-index: 250;
+      background: var(--accent-highlight);
+      color: var(--bg-primary);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: var(--font-ui);
+      transition: top 0.15s ease;
+    }
+
+    .skip-link:focus-visible {
+      top: 12px;
+      text-decoration: none;
+    }
+
     /* Hero controls its own padding; omit global section gutters so height math is purely #hero rules */
     section:not(#hero) {
-      padding: 96px 0;
+      padding: clamp(72px, 12vw, 120px) 0;
     }
 
     /* -------------------------------------------------------------------------
@@ -106,20 +144,22 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(29, 32, 33, 0.88);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(29, 32, 33, 0.78);
+      backdrop-filter: blur(16px) saturate(1.2);
+      -webkit-backdrop-filter: blur(16px) saturate(1.2);
+      border-bottom: 1px solid rgba(80, 73, 69, 0.35);
+      box-shadow: var(--shadow-nav);
     }
 
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      min-height: 56px;
-      max-width: 960px;
+      gap: 16px;
+      min-height: 60px;
+      max-width: var(--content-max);
       margin: 0 auto;
-      padding: 8px calc(var(--page-gutter) + var(--safe-right)) 8px calc(var(--page-gutter) + var(--safe-left));
+      padding: 10px calc(var(--page-gutter) + var(--safe-right)) 10px calc(var(--page-gutter) + var(--safe-left));
     }
 
     .nav-logo {
@@ -152,37 +192,232 @@
 
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 8px;
       list-style: none;
+      align-items: center;
     }
 
     .nav-links a {
       color: var(--fg3);
-      font-size: 15px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      transition: color 0.15s;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: color 0.18s ease, background 0.18s ease;
     }
 
-    .nav-links a:hover { color: var(--fg); text-decoration: none; }
+    .nav-links a:hover {
+      color: var(--fg);
+      background: rgba(235, 219, 178, 0.06);
+      text-decoration: none;
+    }
 
     .nav-cta {
       font-family: var(--font-ui);
-      font-size: 15px;
-      padding: 7px 18px;
-      border-radius: 4px;
-      border: 1px solid var(--accent-primary);
-      color: var(--accent-primary);
-      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 9px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(211, 134, 155, 0.55);
+      color: var(--fg1);
+      background: rgba(211, 134, 155, 0.12);
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      letter-spacing: 0.03em;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      letter-spacing: 0.02em;
     }
 
     .nav-cta:hover {
       background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: var(--bg-primary);
+      box-shadow: 0 8px 28px rgba(211, 134, 155, 0.25);
+      text-decoration: none;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .nav-menu-btn {
+      display: none;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin: 0;
+      padding: 0;
+      border: 1px solid var(--bg4);
+      border-radius: 6px;
+      background: rgba(60, 56, 54, 0.5);
+      color: var(--fg2);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+
+    .nav-menu-btn:hover {
+      border-color: var(--fg4);
+      color: var(--fg);
+    }
+
+    .nav-menu-icon {
+      position: relative;
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      box-shadow: 0 -7px 0 currentColor, 0 7px 0 currentColor;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    nav.nav-is-open .nav-menu-icon {
+      visibility: hidden;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    nav.nav-is-open .nav-menu-btn::before,
+    nav.nav-is-open .nav-menu-btn::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 20px;
+      height: 2px;
+      margin-left: -10px;
+      margin-top: -1px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    nav.nav-is-open .nav-menu-btn::before {
+      transform: rotate(45deg);
+    }
+
+    nav.nav-is-open .nav-menu-btn::after {
+      transform: rotate(-45deg);
+    }
+
+    .nav-mobile-root {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      display: flex;
+      justify-content: flex-end;
+      align-items: stretch;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .nav-mobile-root.is-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .nav-mobile-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-mobile-root.is-open .nav-mobile-backdrop {
+      opacity: 1;
+    }
+
+    .nav-mobile-sheet {
+      position: relative;
+      z-index: 1;
+      width: min(320px, 88vw);
+      max-width: 100%;
+      background: var(--bg1);
+      border-left: 1px solid var(--bg3);
+      box-shadow: -12px 0 40px rgba(0, 0, 0, 0.45);
+      padding: calc(72px + env(safe-area-inset-top, 0px)) 24px 24px calc(24px + env(safe-area-inset-right, 0px));
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+    }
+
+    .nav-mobile-root.is-open .nav-mobile-sheet {
+      transform: translateX(0);
+    }
+
+    .nav-mobile-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-mobile-links a {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 10px;
+      color: var(--fg2);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-mobile-links a:hover {
+      background: var(--bg2);
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    .nav-mobile-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(211, 134, 155, 0.55);
+      color: var(--fg1);
+      background: rgba(211, 134, 155, 0.12);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: center;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nav-mobile-cta:hover {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
       color: var(--bg-primary);
       text-decoration: none;
+    }
+
+    body.nav-mobile-open {
+      overflow: hidden;
     }
 
     /* -------------------------------------------------------------------------
@@ -191,6 +426,12 @@
     #hero {
       box-sizing: border-box;
       text-align: center;
+      position: relative;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(211, 134, 155, 0.08), transparent 55%),
+        radial-gradient(ellipse 90% 60% at 100% 40%, rgba(131, 165, 152, 0.06), transparent 45%),
+        radial-gradient(ellipse 70% 50% at 0% 60%, rgba(250, 189, 47, 0.05), transparent 40%),
+        var(--bg-primary);
     }
 
     /* Headline block only — exactly one viewport; screenshot sits below */
@@ -232,10 +473,10 @@
 
     h1 {
       font-family: var(--font-heading);
-      font-size: clamp(36px, 6vw, 58px);
+      font-size: clamp(34px, 5.5vw, 56px);
       font-weight: 700;
-      line-height: 1.12;
-      letter-spacing: -0.02em;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
       color: var(--fg1);
       margin-bottom: 24px;
     }
@@ -262,11 +503,12 @@
 
     .hero-sub {
       font-family: var(--font-body);
-      font-size: clamp(19px, 2.5vw, 23px);
+      font-size: clamp(18px, 2.2vw, 22px);
+      font-weight: 400;
       color: var(--text-secondary);
-      max-width: 38rem;
-      margin: 0 auto 44px;
-      line-height: 1.2;
+      max-width: 36rem;
+      margin: 0 auto 40px;
+      line-height: 1.55;
     }
 
     .hero-actions {
@@ -280,19 +522,21 @@
       font-family: var(--font-ui);
       font-size: 16px;
       font-weight: 600;
-      padding: 12px 28px;
-      border-radius: 4px;
+      padding: 14px 28px;
+      border-radius: 999px;
       border: none;
-      background: var(--accent-primary);
+      background: linear-gradient(165deg, #e8b4c4 0%, var(--accent-primary) 55%, var(--purple-dim) 100%);
       color: var(--bg-primary);
       cursor: pointer;
       letter-spacing: 0.02em;
-      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 4px 20px rgba(211, 134, 155, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
 
     .btn-primary:hover {
-      background: #e0a3b5;
-      transform: translateY(-1px);
+      filter: brightness(1.06);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(211, 134, 155, 0.4);
       text-decoration: none;
       color: var(--bg-primary);
     }
@@ -300,26 +544,28 @@
     .btn-ghost {
       font-family: var(--font-ui);
       font-size: 16px;
-      padding: 12px 28px;
-      border-radius: 4px;
-      border: 1px solid var(--bg4);
-      background: transparent;
+      font-weight: 500;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: 1px solid var(--surface-border);
+      background: rgba(60, 56, 54, 0.35);
       color: var(--fg2);
       cursor: pointer;
       letter-spacing: 0.02em;
-      transition: border-color 0.15s, color 0.15s;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
     }
 
     .btn-ghost:hover {
-      border-color: var(--fg3);
+      border-color: rgba(235, 219, 178, 0.35);
+      background: rgba(80, 73, 69, 0.45);
       color: var(--fg);
       text-decoration: none;
     }
 
     #hero .btn-primary,
     #hero .btn-ghost {
-      font-size: 20px;
-      padding: 10px 20px;
+      font-size: clamp(16px, 1.9vw, 18px);
+      padding: 14px 26px;
     }
 
     /* -------------------------------------------------------------------------
@@ -339,13 +585,14 @@
 
     .hero-shot-title {
       font-family: var(--font-heading);
-      font-size: 2.3em;
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
       font-weight: 700;
       color: var(--fg1);
       text-align: left;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
-      margin-bottom: 2em;
+      letter-spacing: -0.025em;
+      line-height: 1.3;
+      margin-bottom: 1.5em;
+      max-width: min(28rem, 100%);
     }
 
     .hero-editor-shot {
@@ -375,7 +622,6 @@
         calc(100vw - 2 * var(--page-gutter) - var(--safe-left) - var(--safe-right))
       );
       height: auto;
-      vertical-align: bottom;
       border: none;
       box-shadow: none;
       outline: none;
@@ -409,34 +655,74 @@
       outline: none;
     }
 
+    .hero-editor-shot.is-missing img,
+    .img-fade-shell.is-missing img {
+      display: none;
+    }
+
+    .media-fallback {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: clamp(220px, 34vw, 420px);
+      width: 100%;
+      padding: 24px;
+      border: 1px solid var(--bg3);
+      border-radius: 8px;
+      background: linear-gradient(180deg, var(--bg1), var(--bg_h));
+      color: var(--fg3);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+
+    .hero-editor-shot .media-fallback {
+      min-height: clamp(260px, 36vw, 480px);
+      margin-bottom: 0;
+    }
+
+    .hero-editor-shot.is-missing .media-fallback,
+    .img-fade-shell.is-missing .media-fallback {
+      display: flex;
+    }
+
     /* -------------------------------------------------------------------------
      * Section typography (features, safety, CTA)
      * ---------------------------------------------------------------------- */
     .section-label {
+      display: inline-block;
       font-family: var(--font-mono);
-      font-size: 13px;
-      letter-spacing: 0.14em;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--accent-secondary);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(254, 128, 25, 0.28);
+      background: rgba(254, 128, 25, 0.08);
     }
 
     h2 {
       font-family: var(--font-heading);
-      font-size: clamp(26px, 4vw, 38px);
+      font-size: clamp(26px, 3.6vw, 40px);
       font-weight: 700;
       color: var(--fg1);
-      line-height: 1.2;
-      letter-spacing: -0.02em;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
       margin-bottom: 16px;
     }
 
     .section-sub {
-      font-size: 18px;
+      font-size: clamp(17px, 1.5vw, 19px);
       color: var(--text-secondary);
-      max-width: 520px;
-      margin-bottom: 56px;
-      line-height: 1.7;
+      max-width: 34rem;
+      margin-bottom: 48px;
+      line-height: 1.68;
     }
 
     /* -------------------------------------------------------------------------
@@ -455,9 +741,7 @@
     }
 
     /* Edge-to-edge content; only horizontal gutters (matches features-grid-bleed) */
-    .wrong-tools-bleed,
-    .writer-happiness-bleed,
-    .assistant-bleed {
+    .section-bleed {
       width: 100%;
       max-width: none;
       margin: 0;
@@ -490,16 +774,16 @@
     }
 
     .wrong-tools-sub {
-      font-size: 1.3em;
+      font-size: clamp(1.05rem, 1.8vw, 1.2rem);
       color: var(--text-secondary);
-      line-height: 1.4;
+      line-height: 1.58;
       margin: 0;
       max-width: 36rem;
     }
 
     /* Shared mock frame: “window” on dark canvas — same pixel height for both columns */
     .mock-ui {
-      border-radius: 10px;
+      border-radius: 14px;
       overflow: hidden;
       box-shadow: var(--mock-frame-shadow);
       font-family: system-ui, "Segoe UI", Roboto, sans-serif;
@@ -772,49 +1056,58 @@
     .features-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 24px;
+      gap: clamp(18px, 2.5vw, 28px);
       width: 100%;
       max-width: none;
     }
 
     .feature-card {
-      background: transparent;
-      border: 1px solid var(--bg3);
-      border-radius: 6px;
-      padding: 28px 28px;
-      transition: border-color 0.2s;
+      background: var(--surface-1);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px;
+      padding: 28px 26px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .feature-card:hover { border-color: var(--bg4); }
+    .feature-card:hover {
+      border-color: rgba(235, 219, 178, 0.2);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-soft);
+    }
 
     .feature-tag {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 3px;
-      margin-bottom: 14px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      border: 1px solid transparent;
     }
 
-    .tag-ai      { background: rgba(211,134,155,0.15); color: var(--purple); }
-    .tag-editor  { background: rgba(131,165,152,0.15); color: var(--blue); }
-    .tag-history { background: rgba(250,189,47,0.15);  color: var(--yellow); }
-    .tag-format  { background: rgba(142,192,124,0.15); color: var(--aqua); }
+    .tag-ai      { background: rgba(211,134,155,0.12); color: var(--purple); border-color: rgba(211,134,155,0.25); }
+    .tag-editor  { background: rgba(131,165,152,0.12); color: var(--blue); border-color: rgba(131,165,152,0.25); }
+    .tag-history { background: rgba(250,189,47,0.1);  color: var(--yellow); border-color: rgba(250,189,47,0.28); }
+    .tag-format  { background: rgba(142,192,124,0.12); color: var(--aqua); border-color: rgba(142,192,124,0.25); }
 
     .feature-card h3 {
       font-family: var(--font-heading);
-      font-size: 17px;
+      font-size: 1.125rem;
       font-weight: 700;
       color: var(--fg1);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
     }
 
     .feature-card p {
-      font-size: 1.2em;
-      color: var(--text);
-      line-height: 1.3;
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
     }
 
     .feature-screenshot {
@@ -845,23 +1138,25 @@
       background: var(--bg_h);
       width: 100%;
       box-sizing: border-box;
-      border-top: 1px solid var(--bg3);
+      border-top: 1px solid rgba(80, 73, 69, 0.35);
     }
 
-    #assistant .assistant-header {
+    .section-header {
       text-align: center;
     }
 
-    #assistant .assistant-header .section-sub {
+    .section-header .section-sub {
       margin-left: auto;
       margin-right: auto;
     }
 
-    #assistant .safety-split {
+    #assistant .safety-split,
+    #writer-happiness .safety-split {
       margin-top: 48px;
     }
 
-    #assistant .safety-visual .img-fade-shell {
+    #assistant .safety-visual .img-fade-shell,
+    #writer-happiness .safety-visual .img-fade-shell {
       max-width: min(400px, 100%);
       margin-inline: auto;
     }
@@ -875,20 +1170,7 @@
       box-sizing: border-box;
     }
 
-    #writer-happiness .writer-happiness-header {
-      text-align: center;
-    }
-
-    #writer-happiness .writer-happiness-header .section-sub {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #writer-happiness .safety-split {
-      margin-top: 48px;
-    }
-
-    #writer-happiness .safety-copy h3 {
+    #writer-happiness .safety-copy h2 {
       font-family: var(--font-heading);
       font-size: clamp(20px, 2.6vw, 26px);
       font-weight: 700;
@@ -898,18 +1180,6 @@
       margin-bottom: 16px;
     }
 
-    #writer-happiness .safety-visual .img-fade-shell {
-      max-width: min(400px, 100%);
-      margin-inline: auto;
-    }
-
-    /* -------------------------------------------------------------------------
-     * Section: History / Safety callout
-     * ---------------------------------------------------------------------- */
-    #safety {
-      background: var(--bg_h);
-    }
-
     .safety-split {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -917,12 +1187,13 @@
       align-items: center;
     }
 
-    .safety-copy h2 { margin-bottom: 16px; }
+    .safety-copy h2,
+    .safety-copy h3 { margin-bottom: 16px; }
 
     .safety-copy p {
-      font-size: 17px;
+      font-size: 1.02rem;
       color: var(--text-secondary);
-      line-height: 1.75;
+      line-height: 1.72;
       margin-bottom: 16px;
     }
 
@@ -956,10 +1227,26 @@
       text-align: center;
     }
 
+    #cta .container {
+      box-sizing: border-box;
+      max-width: min(720px, 100%);
+      margin-inline: auto;
+      padding: clamp(40px, 7vw, 56px)
+        calc(var(--page-gutter) + var(--safe-right) + 16px)
+        clamp(44px, 7vw, 60px)
+        calc(var(--page-gutter) + var(--safe-left) + 16px);
+      border-radius: 24px;
+      border: 1px solid var(--surface-border);
+      background: linear-gradient(165deg, rgba(50, 48, 47, 0.55) 0%, rgba(29, 32, 33, 0.4) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-soft), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    }
+
     #cta h2 { margin-bottom: 16px; }
 
     #cta .section-sub {
-      margin: 0 auto 40px;
+      margin: 0 auto 36px;
     }
 
     /* -------------------------------------------------------------------------
@@ -967,15 +1254,15 @@
      * ---------------------------------------------------------------------- */
     footer {
       background: var(--bg_h);
-      border-top: 1px solid var(--bg3);
-      padding: 36px 0;
+      border-top: 1px solid rgba(80, 73, 69, 0.35);
+      padding: 40px 0 48px;
     }
 
     .footer-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 960px;
+      max-width: var(--content-max);
       margin: 0 auto;
       padding: 0 calc(var(--page-gutter) + var(--safe-right)) calc(var(--safe-bottom))
         calc(var(--page-gutter) + var(--safe-left));
@@ -983,7 +1270,9 @@
 
     .footer-logo {
       font-family: var(--font-heading);
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
       color: var(--fg3);
     }
 
@@ -1002,10 +1291,6 @@
       .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 900px) {
-      .wrong-tools-grid { grid-template-columns: 1fr; }
-    }
-
     @media (max-width: 768px) {
       :root {
         --page-gutter: clamp(16px, 4.5vw, 40px);
@@ -1016,15 +1301,19 @@
       }
       .features-grid { grid-template-columns: 1fr; }
       .safety-split { grid-template-columns: 1fr; gap: 40px; }
+      #assistant .safety-visual { order: 2; }
+      #assistant .safety-copy { order: 1; }
       .wrong-tools-grid { grid-template-columns: 1fr; gap: 40px; }
       .nav-links { display: none; }
       .nav-cta { display: none; }
+      .nav-menu-btn { display: none; }
       .nav-inner {
         justify-content: center;
       }
       .nav-logo {
         justify-content: center;
-        margin: 0 auto;
+        margin-inline: auto;
+        max-width: 100%;
       }
       .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
       .hero-shot-title {
@@ -1037,8 +1326,21 @@
       }
       .wrong-tools-sub { font-size: 1.1em; }
       .section-sub { font-size: 17px; margin-bottom: 40px; }
+      .safety-copy p,
+      .wrong-tools-sub {
+        line-height: 1.65;
+        font-size: 16px;
+      }
       .feature-card { padding: 22px 20px; }
       .feature-card p { font-size: 1.05em; }
+      #cta .btn-primary,
+      .hero-actions .btn-primary,
+      .hero-actions .btn-ghost {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
     /* Narrow portrait phones (~9:16 and taller): comfortable vertical rhythm */
@@ -1074,7 +1376,7 @@
     }
 
     /* Short landscape (mobile keyboard, landscape video): avoid oversized hero + mocks */
-    @media (max-height: 500px) and (orientation: landscape) {
+    @media (max-height: 560px) and (orientation: landscape) {
       .hero-copy {
         min-height: auto;
         padding-block: 72px 48px;
@@ -1084,24 +1386,47 @@
       }
     }
 
-    /* Very wide but short viewports */
-    @media (min-aspect-ratio: 2/1) and (max-height: 560px) {
-      .hero-copy {
-        min-height: auto;
-        padding-block: 64px 40px;
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .feature-card:hover,
+      .btn-primary:hover {
+        transform: none;
+      }
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    a.btn-primary,
+    a.btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 769px) {
+      a.nav-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <!-- -----------------------------------------------------------------------
    * Nav
    * -------------------------------------------------------------------- -->
-  <nav>
+  <nav aria-label="Primary">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">
-        <pre class="nav-ascii">   ▄██████▄     ▄████████ ███    █▄   ▄█    █▄  ▀█████████▄   ▄██████▄  ▀████    ▐████▀         ▄████████     ███     ███    █▄  ████████▄   ▄█   ▄██████▄
+      <a href="#hero" class="nav-logo" aria-label="Gruvbox Studio home">
+        <pre class="nav-ascii" aria-hidden="true">   ▄██████▄     ▄████████ ███    █▄   ▄█    █▄  ▀█████████▄   ▄██████▄  ▀████    ▐████▀         ▄████████     ███     ███    █▄  ████████▄   ▄█   ▄██████▄
   ███    ███   ███    ███ ███    ███ ███    ███   ███    ███ ███    ███   ███▌   ████▀         ███    ███ ▀█████████▄ ███    ███ ███   ▀███ ███  ███    ███
   ███    █▀    ███    ███ ███    ███ ███    ███   ███    ███ ███    ███    ███  ▐███           ███    █▀     ▀███▀▀██ ███    ███ ███    ███ ███▌ ███    ███
  ▄███         ▄███▄▄▄▄██▀ ███    ███ ███    ███  ▄███▄▄▄██▀  ███    ███    ▀███▄███▀           ███            ███   ▀ ███    ███ ███    ███ ███▌ ███    ███
@@ -1113,11 +1438,34 @@
       </a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
-        <li><a href="#safety">Stay in charge</a></li>
+        <li><a href="#assistant">Stay in charge</a></li>
       </ul>
-      <a href="#cta" class="nav-cta">Early Access</a>
+      <a href="#cta" class="nav-cta">Request early access</a>
+      <button
+        type="button"
+        class="nav-menu-btn"
+        id="nav-menu-toggle"
+        aria-expanded="false"
+        aria-controls="nav-mobile-root"
+      >
+        <span class="nav-menu-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+    </div>
+    <div id="nav-mobile-root" class="nav-mobile-root" hidden>
+      <button type="button" class="nav-mobile-backdrop" id="nav-mobile-backdrop" aria-label="Close menu"></button>
+      <aside class="nav-mobile-sheet" role="dialog" aria-modal="true" aria-labelledby="nav-mobile-title">
+        <span id="nav-mobile-title" class="visually-hidden">Site navigation</span>
+        <ul class="nav-mobile-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#assistant">Stay in charge</a></li>
+        </ul>
+        <a href="#cta" class="nav-mobile-cta">Request early access</a>
+      </aside>
     </div>
   </nav>
+
+  <main id="main-content">
 
   <!-- -----------------------------------------------------------------------
    * Hero
@@ -1132,7 +1480,7 @@
           </span>
         </h1>
         <p class="hero-sub">
-          Our philosphy: People are capable of using AI responsibly- they just havent been given the right tools.
+          Our philosophy: people are capable of using AI responsibly; they just haven't been given the right tools.
         </p>
         <div class="hero-actions">
           <a href="#cta" class="btn-primary">Request early access</a>
@@ -1146,7 +1494,7 @@
    * Wrong tools: generic prompt vs legacy word processor
    * -------------------------------------------------------------------- -->
   <section id="wrong-tools" aria-label="Two familiar tools that are not enough for serious writing">
-    <div class="wrong-tools-bleed">
+    <div class="section-bleed">
       <div class="wrong-tools-grid">
         <article class="wrong-tools-block">
           <div class="mock-ui mock-prompt-ui" aria-hidden="true">
@@ -1219,9 +1567,9 @@
   <!-- -----------------------------------------------------------------------
    * Solution screenshot (full-width rail, continuous with hero palette)
    * -------------------------------------------------------------------- -->
-  <div id="solution">
+  <section id="solution" aria-labelledby="solution-heading">
     <div class="hero-product-rail">
-      <h2 class="hero-shot-title">Here's what our solution looks like:</h2>
+      <h2 id="solution-heading" class="hero-shot-title">Here is what our solution looks like:</h2>
     </div>
     <figure class="hero-product-rail hero-editor-shot">
       <img
@@ -1232,41 +1580,30 @@
         decoding="async"
         fetchpriority="high"
       />
+      <div class="media-fallback" role="img" aria-label="Main application preview unavailable">
+        Main application preview unavailable
+      </div>
     </figure>
-  </div>
+  </section>
 
   <!-- -----------------------------------------------------------------------
    * Writer happiness: meticulous UI + revision history
    * -------------------------------------------------------------------- -->
   <section id="writer-happiness" aria-labelledby="writer-happiness-heading">
-    <div class="writer-happiness-bleed">
-      <div class="writer-happiness-header">
+    <div class="section-bleed">
+      <div class="section-header">
         <div class="section-label">Design goals</div>
         <h2 id="writer-happiness-heading">Optimized for writer happiness</h2>
         <p class="section-sub">
-          We fuss over layout, type, and pacing so the screen stays gentle on the eyes — and we treat older drafts as
-          something you can always find again, not something you cross your fingers and hope is still there.
+          We tune layout and type for long sessions—and keep every draft findable, not buried in duplicate files.
         </p>
       </div>
       <div class="safety-split">
         <div class="safety-copy">
           <div class="section-label">Version history</div>
-          <h2>Every version leaves a footprint — so you can move fast without betting the file.</h2>
+          <h2>Version history that gives you time-travelling super-powers.</h2>
           <p>
-            You know this: a sentence felt perfect at lunch and wrong by dinner. The assistant might hand you something
-            lovely and something shaky in the same breath. Most tools leave you with one fragile draft or a pile of
-            duplicate files. Here your work stays in order — what you wrote, the moments you saved when the words were
-            flowing, and separate tries when you or the assistant want to experiment without throwing away what already
-            worked.
-          </p>
-          <p>
-            You can look back, set two moments side by side, and change your mind more than once. Nothing you cared
-            about quietly disappears. The picture here is that trail: a plain record of how the piece grew.
-          </p>
-          <p>
-            You can move quickly and still stay in charge: nothing the assistant suggests becomes part of the draft
-            until you say so — all of it, none of it, or just a single line. Speed doesn&apos;t get to rewrite the page
-            behind your back.
+            AI enables faster writing than ever before—but it also allows for faster and bigger mistakes. That&apos;s why our editor has a Big Ass Undo Button™ built in. Make big mistakes, experiment—and keep the good while throwing out the bad.
           </p>
           <p class="safety-kicker">Below · your versions, shown together in the editor</p>
         </div>
@@ -1280,6 +1617,9 @@
               loading="lazy"
               decoding="async"
             />
+            <div class="media-fallback" role="img" aria-label="Revision history preview unavailable">
+              Revision history preview unavailable
+            </div>
           </div>
         </div>
       </div>
@@ -1294,7 +1634,7 @@
       <div class="section-label">Proof in the craft</div>
       <h2>Powerful tools for serious writing.</h2>
       <p class="section-sub">
-        Underneath that philosophy sits a pragmatic editor — pick your partner model, see every change, rescue any moment from history.
+        A practical editor: pick your model, see every change, rescue any moment from history.
       </p>
     </div>
 
@@ -1304,24 +1644,21 @@
           <span class="feature-tag tag-ai">AI</span>
           <h3>Pick your model</h3>
           <p>
-            Drop in any AI model via a pre-configured connection — no API keys
-            to wrangle, no technical setup required.
+            Connect models through a pre-built setup—no API keys or wiring required.
           </p>
         </div>
         <div class="feature-card">
           <span class="feature-tag tag-history">History</span>
           <h3>Full edit history</h3>
           <p>
-            Every keystroke is tracked. Step back to any previous version of
-            your document at any point — yours and the AI's changes included.
+            Every keystroke is tracked—rewind to any version, yours or the AI&apos;s.
           </p>
         </div>
         <div class="feature-card">
           <span class="feature-tag tag-editor">Editor</span>
           <h3>Decoration-first Markdown</h3>
           <p>
-            Rich text renders as structured decorations while you stay in plaintext mode — so models see
-            the same intents you see. Markdown on a rigid grid keeps the caret honest and your layout stable.
+            Rich text as decorations over plain Markdown—models see what you see. A stable grid keeps the caret honest.
           </p>
         </div>
         <div class="feature-card">
@@ -1336,16 +1673,14 @@
           <span class="feature-tag tag-format">Format</span>
           <h3>Mermaid &amp; LaTeX — first-class ideas</h3>
           <p>
-            Diagrams and math aren&apos;t afterthought screenshots — they plug into an AI‑friendly substrate
-            that keeps extending without orphaned legacy documents.
+            Diagrams and math live in the doc—not pasted images—so they stay editable and AI-friendly as you extend the project.
           </p>
         </div>
         <div class="feature-card">
           <span class="feature-tag tag-editor">Editor</span>
           <h3>Gruvbox warmth, on purpose</h3>
           <p>
-            A low-contrast palette tuned for marathon sessions — the same intentionality runs through
-            layout, pacing, and how often we interrupt flow.
+            Low-contrast Gruvbox colors for long sessions—same care in layout and how often we interrupt you.
           </p>
         </div>
       </div>
@@ -1356,14 +1691,12 @@
    * Assistant: same bleed + header + safety-split pattern as writer happiness
    * -------------------------------------------------------------------- -->
   <section id="assistant" aria-labelledby="assistant-heading">
-    <div class="assistant-bleed">
-      <div class="assistant-header">
+    <div class="section-bleed">
+      <div class="section-header">
         <div class="section-label">Assistant</div>
         <h2 id="assistant-heading">You steer what the model sees, says, and changes.</h2>
         <p class="section-sub">
-          The assistant isn&apos;t a black box that forgets your world every session. You set the guardrails once — style
-          guides, house rules, who your characters are — and the model works inside them. You decide what it reads, what
-          it writes, and which edits actually touch your draft.
+          Set guardrails once—style, house rules, characters—and the model stays inside them. You choose what it reads, what it writes, and what actually lands in the file.
         </p>
       </div>
       <div class="safety-split">
@@ -1377,36 +1710,25 @@
               loading="lazy"
               decoding="async"
             />
+            <div class="media-fallback" role="img" aria-label="Assistant preview unavailable">
+              Assistant preview unavailable
+            </div>
           </div>
         </div>
         <div class="safety-copy">
           <div class="section-label">Rules, memory, and your file</div>
-          <h2>Control the input, the output, and what lands on the page</h2>
+          <h3>Control the input, the output, and what lands on the page</h3>
           <p>
-            Stop retyping the same brief in every prompt. Attach style documents, explicit rules (show don&apos;t tell,
-            POV, tone), and character sheets — the assistant treats them as ground truth, not something you have to
-            re-explain each time. That shapes both what you ask for and what you get back: output that stays inside the
-            lines you drew.
+            Attach style docs, rules (POV, tone, show-don&apos;t-tell), and character sheets—ground truth you don&apos;t retype every prompt. Asks and answers stay inside the lines you drew.
           </p>
           <p>
-            Memory persists across the work: the assistant remembers your project context instead of starting cold.
-            Use commands to drive it, and let it explore the files you allow — so answers and edits are grounded in your
-            tree, not a pasted snippet from last week.
-          </p>
-          <p>
-            When the model edits the document you&apos;re looking at, every change is highlighted. Accept a line, reject
-            another, or revert the batch altogether — you choose what becomes real text, with no silent rewrites behind
-            the scenes.
+            Memory holds project context; commands drive the assistant; it can read the files you allow—grounded in your tree, not a stale paste. When it edits the open doc, every change is highlighted: accept, reject, or revert by line or batch. No silent rewrites.
           </p>
           <p class="safety-kicker">Below · assistant with rules and memory — you approve every change to the draft</p>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- -----------------------------------------------------------------------
-   * Safety / History deep-dive
-   * -------------------------------------------------------------------- -->
 
   <!-- -----------------------------------------------------------------------
    * CTA
@@ -1416,16 +1738,14 @@
       <div class="section-label">Join the builders</div>
       <h2>We&apos;re building this in public — with people who still believe the author matters.</h2>
       <p class="section-sub">
-        Gruvbox Studio is young: rough edges, strong opinions, and a bet that the best writing won&apos;t come from
-        handing the keys to a black box. If that story sounds like yours — if you want tools that remember your intent,
-        show their work, and let you steer — ask for early access. You&apos;ll get previews, plain-spoken release notes,
-        and a seat at the table where we decide what ships next. Skepticism welcome; it keeps us honest.
+        Gruvbox Studio is young—rough edges, strong opinions, built for authors who steer instead of surrendering the draft to a black box. Request early access for previews, straight release notes, and input on what ships next. Skepticism welcome.
       </p>
       <div class="hero-actions">
-        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Early Access" class="btn-primary">Request access</a>
+        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Early Access" class="btn-primary">Request early access</a>
       </div>
     </div>
   </section>
+  </main>
 
   <!-- -----------------------------------------------------------------------
    * Footer
@@ -1437,5 +1757,129 @@
     </div>
   </footer>
 
+<script>
+  (function () {
+    var mediaImages = document.querySelectorAll('img[src^="assets/"]');
+    mediaImages.forEach(function (img) {
+      var markMissing = function () {
+        var shell = img.closest('.img-fade-shell, .hero-editor-shot');
+        if (shell) {
+          shell.classList.add('is-missing');
+        }
+        img.style.display = 'none';
+      };
+
+      if (img.complete && img.naturalWidth === 0) {
+        markMissing();
+      } else {
+        img.addEventListener('error', markMissing, { once: true });
+      }
+    });
+  })();
+
+  (function () {
+    var nav = document.querySelector('nav[aria-label="Primary"]');
+    if (!nav) return;
+
+    var btn = document.getElementById('nav-menu-toggle');
+    var root = document.getElementById('nav-mobile-root');
+    var backdrop = document.getElementById('nav-mobile-backdrop');
+    var sheet = root ? root.querySelector('.nav-mobile-sheet') : null;
+    var body = document.body;
+
+    if (!btn || !root || !backdrop || !sheet) return;
+
+    var closeTimer = null;
+
+    function isMenuApplicable() {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    function openMenu() {
+      if (!isMenuApplicable()) return;
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      root.hidden = false;
+      nav.classList.add('nav-is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      body.classList.add('nav-mobile-open');
+      requestAnimationFrame(function () {
+        root.classList.add('is-open');
+      });
+      var firstLink = root.querySelector('.nav-mobile-links a');
+      if (firstLink) {
+        firstLink.focus();
+      }
+    }
+
+    function closeMenu() {
+      nav.classList.remove('nav-is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      body.classList.remove('nav-mobile-open');
+      root.classList.remove('is-open');
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+      }
+      var reduced =
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var delay = reduced ? 0 : 280;
+      closeTimer = setTimeout(function () {
+        root.hidden = true;
+        closeTimer = null;
+      }, delay);
+      if (isMenuApplicable()) {
+        btn.focus();
+      }
+    }
+
+    function toggleMenu() {
+      if (nav.classList.contains('nav-is-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    btn.addEventListener('click', function () {
+      toggleMenu();
+    });
+
+    backdrop.addEventListener('click', function () {
+      closeMenu();
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && nav.classList.contains('nav-is-open')) {
+        ev.preventDefault();
+        closeMenu();
+      }
+    });
+
+    root.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener('click', function () {
+        if (nav.classList.contains('nav-is-open')) {
+          closeMenu();
+        }
+      });
+    });
+
+    window.addEventListener('resize', function () {
+      if (!isMenuApplicable() && nav.classList.contains('nav-is-open')) {
+        root.hidden = true;
+        root.classList.remove('is-open');
+        nav.classList.remove('nav-is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        body.classList.remove('nav-mobile-open');
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+      }
+    });
+  })();
+</script>
 </body>
 </html>
