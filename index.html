@@ -56,6 +56,9 @@
       --surface-border: rgba(80, 73, 69, 0.45);
       --shadow-soft:  0 18px 48px rgba(0, 0, 0, 0.35);
       --shadow-nav:   0 1px 0 rgba(255, 255, 255, 0.04);
+      --motion-fast: 180ms;
+      --motion-base: 220ms;
+      --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
       --font-display: Georgia, "Times New Roman", serif;
       --font-ui:      "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -176,7 +179,7 @@
     .nav-ascii {
       font-family: var(--font-mono);
       font-size: 3.2px;
-      line-height: 1.18;
+      line-height: 1.34;
       white-space: pre;
       background: linear-gradient(
         to bottom,
@@ -205,7 +208,7 @@
       text-transform: none;
       padding: 8px 14px;
       border-radius: 999px;
-      transition: color 0.18s ease, background 0.18s ease;
+      transition: color var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease);
     }
 
     .nav-links a:hover {
@@ -217,22 +220,21 @@
     .nav-cta {
       font-family: var(--font-ui);
       font-size: 14px;
-      font-weight: 600;
-      padding: 9px 20px;
+      font-weight: 500;
+      padding: 8px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(211, 134, 155, 0.55);
-      color: var(--fg1);
-      background: rgba(211, 134, 155, 0.12);
+      border: 1px solid rgba(235, 219, 178, 0.22);
+      color: var(--fg2);
+      background: rgba(60, 56, 54, 0.28);
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: background var(--motion-base) var(--motion-ease), color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease);
       letter-spacing: 0.02em;
     }
 
     .nav-cta:hover {
-      background: var(--accent-primary);
-      border-color: var(--accent-primary);
-      color: var(--bg-primary);
-      box-shadow: 0 8px 28px rgba(211, 134, 155, 0.25);
+      background: rgba(80, 73, 69, 0.52);
+      border-color: rgba(235, 219, 178, 0.36);
+      color: var(--fg1);
       text-decoration: none;
     }
 
@@ -263,7 +265,7 @@
       color: var(--fg2);
       cursor: pointer;
       flex-shrink: 0;
-      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      transition: border-color var(--motion-fast) var(--motion-ease), background var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
     }
 
     .nav-menu-btn:hover {
@@ -382,7 +384,7 @@
       font-weight: 500;
       letter-spacing: 0.02em;
       text-transform: none;
-      transition: background 0.15s, color 0.15s;
+      transition: background var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
     }
 
     .nav-mobile-links a:hover {
@@ -398,21 +400,21 @@
       min-height: 48px;
       padding: 12px 22px;
       border-radius: 999px;
-      border: 1px solid rgba(211, 134, 155, 0.55);
-      color: var(--fg1);
-      background: rgba(211, 134, 155, 0.12);
+      border: 1px solid rgba(235, 219, 178, 0.22);
+      color: var(--fg2);
+      background: rgba(60, 56, 54, 0.28);
       font-family: var(--font-ui);
       font-size: 15px;
       font-weight: 600;
       letter-spacing: 0.02em;
       text-align: center;
-      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      transition: background var(--motion-base) var(--motion-ease), color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease);
     }
 
     .nav-mobile-cta:hover {
-      background: var(--accent-primary);
-      border-color: var(--accent-primary);
-      color: var(--bg-primary);
+      background: rgba(80, 73, 69, 0.52);
+      border-color: rgba(235, 219, 178, 0.36);
+      color: var(--fg1);
       text-decoration: none;
     }
 
@@ -487,8 +489,8 @@
       flex-direction: column;
       align-items: center;
       gap: clamp(14px, 2.2vw, 22px);
-      line-height: 1.3;
-      max-width: 22em;
+      line-height: 1.22;
+      max-width: 19.5em;
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 28px;
@@ -530,15 +532,24 @@
       cursor: pointer;
       letter-spacing: 0.02em;
       box-shadow: 0 4px 20px rgba(211, 134, 155, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      transition: transform var(--motion-fast) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease), filter var(--motion-fast) var(--motion-ease);
     }
 
     .btn-primary:hover {
       filter: brightness(1.06);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 36px rgba(211, 134, 155, 0.4);
+      transform: translateY(-2px) scale(1.015);
+      box-shadow: 0 14px 38px rgba(211, 134, 155, 0.42);
       text-decoration: none;
       color: var(--bg-primary);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px) scale(1.005);
+      box-shadow: 0 10px 28px rgba(211, 134, 155, 0.4);
+    }
+
+    .btn-primary:focus-visible {
+      box-shadow: 0 0 0 3px rgba(250, 189, 47, 0.38), 0 12px 34px rgba(211, 134, 155, 0.36);
     }
 
     .btn-ghost {
@@ -552,7 +563,7 @@
       color: var(--fg2);
       cursor: pointer;
       letter-spacing: 0.02em;
-      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+      transition: border-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease), background var(--motion-base) var(--motion-ease);
     }
 
     .btn-ghost:hover {
@@ -560,6 +571,15 @@
       background: rgba(80, 73, 69, 0.45);
       color: var(--fg);
       text-decoration: none;
+    }
+
+    .hero-trust {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--fg4);
+      font-family: var(--font-ui);
+      letter-spacing: 0.01em;
     }
 
     #hero .btn-primary,
@@ -759,7 +779,7 @@
     .wrong-tools-block {
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 34px;
     }
 
     .wrong-tools-headline {
@@ -770,13 +790,14 @@
       letter-spacing: -0.02em;
       line-height: 1.25;
       margin: 0;
+      margin-top: 8px;
       max-width: 22em;
     }
 
     .wrong-tools-sub {
       font-size: clamp(1.05rem, 1.8vw, 1.2rem);
       color: var(--text-secondary);
-      line-height: 1.58;
+      line-height: 1.62;
       margin: 0;
       max-width: 36rem;
     }
@@ -798,7 +819,7 @@
 
     /* —— Generic prompt / chat UI (modern dark “assistant” shell) —— */
     .mock-prompt-ui {
-      background: linear-gradient(165deg, #1a1b1f 0%, #121316 45%, #0e0f12 100%);
+      background: linear-gradient(165deg, #191a1d 0%, #111216 45%, #0e0f12 100%);
       color: #e4e4e7;
     }
 
@@ -806,19 +827,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px 14px 16px;
-      background: rgba(255, 255, 255, 0.04);
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.03);
       border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
       flex-shrink: 0;
     }
 
     .mock-prompt-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      font-size: 15px;
+      gap: 9px;
+      font-weight: 550;
+      font-size: 14px;
       letter-spacing: -0.02em;
       color: #fafafa;
     }
@@ -838,19 +859,19 @@
       font-weight: 500;
       letter-spacing: 0.02em;
       color: #a1a1aa;
-      padding: 7px 14px 7px 12px;
+      padding: 6px 12px 6px 10px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .mock-prompt-thread {
       flex: 1;
       min-height: 0;
-      padding: 20px 18px 18px;
+      padding: 18px 16px 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       overflow: hidden;
       justify-content: flex-end;
       background:
@@ -860,10 +881,10 @@
 
     .mock-prompt-msg {
       max-width: 94%;
-      padding: 13px 17px;
+      padding: 12px 15px;
       font-size: 13px;
-      line-height: 1.5;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+      line-height: 1.45;
+      box-shadow: 0 1px 9px rgba(0, 0, 0, 0.2);
     }
 
     .mock-prompt-msg--user {
@@ -885,8 +906,8 @@
     .mock-prompt-inputbar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 14px 16px;
+      gap: 8px;
+      padding: 12px;
       background: rgba(0, 0, 0, 0.35);
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       flex-shrink: 0;
@@ -894,28 +915,28 @@
 
     .mock-prompt-fake-input {
       flex: 1;
-      padding: 13px 18px;
+      padding: 11px 15px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.05);
       color: #71717a;
       font-size: 13px;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     .mock-prompt-send {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: linear-gradient(145deg, #818cf8 0%, #6366f1 45%, #4f46e5 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 600;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
+      box-shadow: 0 3px 12px rgba(99, 102, 241, 0.35);
     }
 
     /* —— Legacy word-processor mock (oppressive Office-like) —— */
@@ -928,10 +949,10 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 12px;
+      padding: 7px 10px;
       background: linear-gradient(180deg, #2c5aa0 0%, #1e4a7a 100%);
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
       flex-shrink: 0;
     }
@@ -970,7 +991,7 @@
     }
 
     .mock-word-tabs span {
-      padding: 6px 12px;
+      padding: 5px 10px;
       color: #444;
     }
 
@@ -983,11 +1004,11 @@
     }
 
     .mock-word-ribbon-tools {
-      padding: 8px 12px;
+      padding: 7px 10px;
       display: flex;
       gap: 10px;
       align-items: center;
-      font-size: 10px;
+      font-size: 9px;
       color: #555;
       flex-wrap: wrap;
     }
@@ -1001,7 +1022,7 @@
     .mock-word-page-wrap {
       flex: 1;
       min-height: 0;
-      padding: 16px 14px 18px;
+      padding: 13px 11px 14px;
       background: #c0c0c0;
       display: flex;
       flex-direction: column;
@@ -1016,7 +1037,7 @@
       min-height: 0;
       background: #fff;
       box-shadow: var(--mock-frame-shadow);
-      padding: 20px 24px;
+      padding: 17px 20px;
       font-family: "Times New Roman", Times, serif;
       font-size: 11px;
       line-height: 1.55;
@@ -1065,21 +1086,24 @@
       background: var(--surface-1);
       border: 1px solid var(--surface-border);
       border-radius: 16px;
-      padding: 28px 26px;
+      padding: 24px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: none;
+      transition: border-color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease), background var(--motion-base) var(--motion-ease);
     }
 
     .feature-card:hover {
       border-color: rgba(235, 219, 178, 0.2);
       transform: translateY(-3px);
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
+      background: rgba(45, 43, 42, 0.62);
     }
 
     .feature-tag {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 0.1em;
@@ -1087,20 +1111,59 @@
       padding: 5px 11px;
       border-radius: 999px;
       margin-bottom: 16px;
-      border: 1px solid transparent;
+      border: 1px solid rgba(168, 153, 132, 0.3);
+      background: rgba(80, 73, 69, 0.2);
+      color: var(--fg4);
+      transition: color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), background var(--motion-base) var(--motion-ease);
     }
 
-    .tag-ai      { background: rgba(211,134,155,0.12); color: var(--purple); border-color: rgba(211,134,155,0.25); }
-    .tag-editor  { background: rgba(131,165,152,0.12); color: var(--blue); border-color: rgba(131,165,152,0.25); }
-    .tag-history { background: rgba(250,189,47,0.1);  color: var(--yellow); border-color: rgba(250,189,47,0.28); }
-    .tag-format  { background: rgba(142,192,124,0.12); color: var(--aqua); border-color: rgba(142,192,124,0.25); }
+    .feature-tag-icon {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.82;
+      transition: opacity var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease);
+    }
+
+    .feature-card:hover .feature-tag-icon {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .feature-card:hover .tag-ai {
+      color: var(--purple);
+      border-color: rgba(211, 134, 155, 0.38);
+      background: rgba(211, 134, 155, 0.12);
+    }
+
+    .feature-card:hover .tag-editor {
+      color: var(--blue);
+      border-color: rgba(131, 165, 152, 0.38);
+      background: rgba(131, 165, 152, 0.12);
+    }
+
+    .feature-card:hover .tag-history {
+      color: var(--yellow);
+      border-color: rgba(250, 189, 47, 0.38);
+      background: rgba(250, 189, 47, 0.1);
+    }
+
+    .feature-card:hover .tag-format {
+      color: var(--aqua);
+      border-color: rgba(142, 192, 124, 0.38);
+      background: rgba(142, 192, 124, 0.12);
+    }
 
     .feature-card h3 {
       font-family: var(--font-heading);
       font-size: 1.125rem;
       font-weight: 700;
       color: var(--fg1);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       letter-spacing: -0.02em;
     }
 
@@ -1108,6 +1171,7 @@
       font-size: 0.98rem;
       color: var(--text-secondary);
       line-height: 1.55;
+      margin: 0;
     }
 
     .feature-screenshot {
@@ -1152,13 +1216,12 @@
 
     #assistant .safety-split,
     #writer-happiness .safety-split {
-      margin-top: 48px;
+      margin-top: clamp(28px, 4vw, 40px);
     }
 
-    #assistant .safety-visual .img-fade-shell,
-    #writer-happiness .safety-visual .img-fade-shell {
-      max-width: min(400px, 100%);
-      margin-inline: auto;
+    #assistant .section-sub,
+    #writer-happiness .section-sub {
+      margin-bottom: clamp(28px, 4vw, 40px);
     }
 
     /* -------------------------------------------------------------------------
@@ -1183,8 +1246,20 @@
     .safety-split {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
+      gap: clamp(20px, 3.2vw, 36px);
+      align-items: start;
+      --split-inner-max: min(100%, 460px);
+    }
+
+    #writer-happiness .safety-split,
+    #assistant .safety-split {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .safety-copy {
+      width: 100%;
+      max-width: var(--split-inner-max);
+      margin-inline: auto;
     }
 
     .safety-copy h2,
@@ -1205,18 +1280,38 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--fg4);
-      margin-bottom: 20px;
-      margin-top: 8px;
+      margin-bottom: 12px;
+      margin-top: 10px;
     }
 
     .safety-visual {
       position: relative;
+      display: flex;
+      align-items: flex-start;
+      width: 100%;
     }
 
     .safety-visual .img-fade-shell {
-      width: 100%;
-      height: fit-content;
+      width: min(100%, clamp(230px, 22vw, 320px));
+      max-height: clamp(260px, 34vw, 380px);
+      overflow: hidden;
+      margin-inline: auto;
       --fade-bg: var(--bg_h);
+    }
+
+    #assistant .safety-visual .img-fade-shell::after,
+    #writer-happiness .safety-visual .img-fade-shell::after {
+      height: 56%;
+      min-height: 120px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--fade-bg, var(--bg_h)));
+    }
+
+    #assistant .safety-visual {
+      justify-content: center;
+    }
+
+    #writer-happiness .safety-visual {
+      justify-content: center;
     }
 
     /* -------------------------------------------------------------------------
@@ -1262,6 +1357,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
       max-width: var(--content-max);
       margin: 0 auto;
       padding: 0 calc(var(--page-gutter) + var(--safe-right)) calc(var(--safe-bottom))
@@ -1278,10 +1375,46 @@
 
     .footer-logo span { color: var(--accent-primary); }
 
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--fg4);
+    }
+
+    .footer-links a {
+      color: var(--fg4);
+      text-decoration: none;
+      transition: color var(--motion-fast) var(--motion-ease);
+    }
+
+    .footer-links a:hover {
+      color: var(--fg2);
+      text-decoration: none;
+    }
+
     .footer-note {
       font-family: var(--font-mono);
       font-size: 13px;
       color: var(--fg4);
+    }
+
+    .footer-links-sep {
+      opacity: 0.45;
+      user-select: none;
+    }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity var(--motion-base) var(--motion-ease), transform var(--motion-base) var(--motion-ease);
+    }
+
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* -------------------------------------------------------------------------
@@ -1303,6 +1436,20 @@
       .safety-split { grid-template-columns: 1fr; gap: 40px; }
       #assistant .safety-visual { order: 2; }
       #assistant .safety-copy { order: 1; }
+      #writer-happiness .safety-copy { order: 1; }
+      #writer-happiness .safety-visual { order: 2; }
+      #assistant .safety-split,
+      #writer-happiness .safety-split {
+        margin-top: 28px;
+      }
+      #assistant .safety-visual,
+      #writer-happiness .safety-visual {
+        justify-content: center;
+      }
+      .safety-visual .img-fade-shell {
+        width: min(100%, 250px);
+        max-height: 300px;
+      }
       .wrong-tools-grid { grid-template-columns: 1fr; gap: 40px; }
       .nav-links { display: none; }
       .nav-cta { display: none; }
@@ -1350,7 +1497,7 @@
       }
       .nav-ascii {
         font-size: 2.6px;
-        line-height: 1.15;
+        line-height: 1.28;
       }
       h1 {
         font-size: clamp(28px, 9vw, 42px);
@@ -1399,6 +1546,10 @@
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
       }
+      .reveal-on-scroll {
+        opacity: 1;
+        transform: none;
+      }
     }
 
     a.btn-primary,
@@ -1440,7 +1591,7 @@
         <li><a href="#features">Features</a></li>
         <li><a href="#assistant">Stay in charge</a></li>
       </ul>
-      <a href="#cta" class="nav-cta">Request early access</a>
+      <a href="#cta" class="nav-cta">Early access</a>
       <button
         type="button"
         class="nav-menu-btn"
@@ -1460,7 +1611,7 @@
           <li><a href="#features">Features</a></li>
           <li><a href="#assistant">Stay in charge</a></li>
         </ul>
-        <a href="#cta" class="nav-mobile-cta">Request early access</a>
+        <a href="#cta" class="nav-mobile-cta">Early access</a>
       </aside>
     </div>
   </nav>
@@ -1486,6 +1637,7 @@
           <a href="#cta" class="btn-primary">Request early access</a>
           <a href="#features" class="btn-ghost">See what we&apos;re building</a>
         </div>
+        <p class="hero-trust">Private alpha • No spam • Weekly builds</p>
       </div>
     </div>
   </section>
@@ -1496,7 +1648,7 @@
   <section id="wrong-tools" aria-label="Two familiar tools that are not enough for serious writing">
     <div class="section-bleed">
       <div class="wrong-tools-grid">
-        <article class="wrong-tools-block">
+        <article class="wrong-tools-block reveal-on-scroll">
           <div class="mock-ui mock-prompt-ui" aria-hidden="true">
             <div class="mock-prompt-topbar">
               <span class="mock-prompt-brand">Assistant</span>
@@ -1518,7 +1670,7 @@
             slop. You are unable to truly express yourself.
           </p>
         </article>
-        <article class="wrong-tools-block">
+        <article class="wrong-tools-block reveal-on-scroll">
           <div class="mock-ui mock-word-ui" aria-hidden="true">
             <div class="mock-word-titlebar">
               <div class="mock-word-dots"><span class="mock-word-dot"></span><span class="mock-word-dot"></span><span class="mock-word-dot"></span></div>
@@ -1640,44 +1792,62 @@
 
     <div class="features-grid-bleed">
       <div class="features-grid">
-        <div class="feature-card">
-          <span class="feature-tag tag-ai">AI</span>
+        <div class="feature-card reveal-on-scroll">
+          <span class="feature-tag tag-ai">
+            <svg class="feature-tag-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="7"/></svg>
+            AI
+          </span>
           <h3>Pick your model</h3>
           <p>
             Connect models through a pre-built setup—no API keys or wiring required.
           </p>
         </div>
-        <div class="feature-card">
-          <span class="feature-tag tag-history">History</span>
+        <div class="feature-card reveal-on-scroll">
+          <span class="feature-tag tag-history">
+            <svg class="feature-tag-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 7v6l4 2"/></svg>
+            History
+          </span>
           <h3>Full edit history</h3>
           <p>
             Every keystroke is tracked—rewind to any version, yours or the AI&apos;s.
           </p>
         </div>
-        <div class="feature-card">
-          <span class="feature-tag tag-editor">Editor</span>
+        <div class="feature-card reveal-on-scroll">
+          <span class="feature-tag tag-editor">
+            <svg class="feature-tag-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h6"/></svg>
+            Editor
+          </span>
           <h3>Decoration-first Markdown</h3>
           <p>
             Rich text as decorations over plain Markdown—models see what you see. A stable grid keeps the caret honest.
           </p>
         </div>
-        <div class="feature-card">
-          <span class="feature-tag tag-ai">AI</span>
+        <div class="feature-card reveal-on-scroll">
+          <span class="feature-tag tag-ai">
+            <svg class="feature-tag-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="7"/></svg>
+            AI
+          </span>
           <h3>Cherry-pick AI changes</h3>
           <p>
             The AI suggests, you choose. Accept all, reject all, or pick
             individual changes from a side-by-side diff view.
           </p>
         </div>
-        <div class="feature-card">
-          <span class="feature-tag tag-format">Format</span>
+        <div class="feature-card reveal-on-scroll">
+          <span class="feature-tag tag-format">
+            <svg class="feature-tag-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M16 14l4 4m0-4l-4 4"/></svg>
+            Format
+          </span>
           <h3>Mermaid &amp; LaTeX — first-class ideas</h3>
           <p>
             Diagrams and math live in the doc—not pasted images—so they stay editable and AI-friendly as you extend the project.
           </p>
         </div>
-        <div class="feature-card">
-          <span class="feature-tag tag-editor">Editor</span>
+        <div class="feature-card reveal-on-scroll">
+          <span class="feature-tag tag-editor">
+            <svg class="feature-tag-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h6"/></svg>
+            Editor
+          </span>
           <h3>Gruvbox warmth, on purpose</h3>
           <p>
             Low-contrast Gruvbox colors for long sessions—same care in layout and how often we interrupt you.
@@ -1692,14 +1862,14 @@
    * -------------------------------------------------------------------- -->
   <section id="assistant" aria-labelledby="assistant-heading">
     <div class="section-bleed">
-      <div class="section-header">
+        <div class="section-header reveal-on-scroll">
         <div class="section-label">Assistant</div>
         <h2 id="assistant-heading">You steer what the model sees, says, and changes.</h2>
         <p class="section-sub">
           Set guardrails once—style, house rules, characters—and the model stays inside them. You choose what it reads, what it writes, and what actually lands in the file.
         </p>
       </div>
-      <div class="safety-split">
+      <div class="safety-split reveal-on-scroll">
         <div class="safety-visual">
           <div class="img-fade-shell">
             <img
@@ -1734,14 +1904,14 @@
    * CTA
    * -------------------------------------------------------------------- -->
   <section id="cta">
-    <div class="container">
+    <div class="container reveal-on-scroll">
       <div class="section-label">Join the builders</div>
       <h2>We&apos;re building this in public — with people who still believe the author matters.</h2>
       <p class="section-sub">
         Gruvbox Studio is young—rough edges, strong opinions, built for authors who steer instead of surrendering the draft to a black box. Request early access for previews, straight release notes, and input on what ships next. Skepticism welcome.
       </p>
       <div class="hero-actions">
-        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Early Access" class="btn-primary">Request early access</a>
+        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Early Access" class="btn-ghost">Request early access</a>
       </div>
     </div>
   </section>
@@ -1753,11 +1923,46 @@
   <footer>
     <div class="footer-inner">
       <span class="footer-logo">Gruvbox<span>Studio</span></span>
+      <div class="footer-links" aria-label="Footer links">
+        <a href="#features">Features</a>
+        <span class="footer-links-sep" aria-hidden="true">•</span>
+        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Privacy">Privacy</a>
+        <span class="footer-links-sep" aria-hidden="true">•</span>
+        <a href="mailto:isickln08@gmail.com?subject=Gruvbox Studio - Contact">Contact</a>
+      </div>
       <span class="footer-note">Early preview — not yet released</span>
     </div>
   </footer>
 
 <script>
+  (function () {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.reveal-on-scroll').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.reveal-on-scroll').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    var revealObserver = new IntersectionObserver(function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -40px 0px" });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(function (el) {
+      revealObserver.observe(el);
+    });
+  })();
+
   (function () {
     var mediaImages = document.querySelectorAll('img[src^="assets/"]');
     mediaImages.forEach(function (img) {
